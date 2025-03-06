@@ -3,13 +3,12 @@ import java.util.List;
 import java.util.Random;
 
 public class RuletaRusa {
-    private List<Integer> tambor;
     private int bala;
     private int posicionActual;
     Random ra = new Random();
 
     public RuletaRusa() {
-        tambor = new ArrayList<>();
+        List<Integer> tambor = new ArrayList<>();
         for (int i = 0; i < 6; i++) {
             tambor.add(i);
         }

@@ -28,12 +28,12 @@ public class Main {
                 if (respuesta.equalsIgnoreCase("s")) {
                     if (ruletas.disparar()) {
                         System.out.println(" El Jugador " + (jugadorActual) + " ha perdido.");
-                        System.out.println(ruletas.toString());
+                        System.out.println(ruletas);
                         System.out.println();
                         juegoTerminado = true;
                     } else {
                         System.out.println(" El Jugador " + (jugadorActual) + " ha sobrevivido.");
-                        System.out.println(ruletas.toString());
+                        System.out.println(ruletas);
                         jugadorActual++;
                         if (jugadorActual > numJugadores) {
                             jugadorActual = 1;
