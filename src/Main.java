@@ -1,64 +1,95 @@
-import java.util.Scanner;
+package org.example;
+
 import java.util.Random;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
+        cabinaTelefonica control = new cabinaTelefonica();
         Scanner scanner = new Scanner(System.in);
-        Random random = new Random();
-        int numJugadores;
+        Random random = new Random(); // Crear un objeto Random
+        String opcion;
 
-        System.out.print("Ingrese el número de jugadores: ");
-        numJugadores = scanner.nextInt();
-        scanner.nextLine();
+        do {
+            System.out.println("1. Agregar cabina");
+            System.out.println("2. Registrar llamadas");
+            System.out.println("3. Mostrar información de cabinas");
+            System.out.println("4. Mostrar información total");
+            System.out.println("5. Reiniciar cabinas");
+            System.out.println("0. Salir");
+            System.out.print("Elige una opcion: ");
+            opcion = scanner.nextLine();
 
-        RuletaRusa ruletas = new RuletaRusa();
+            switch (opcion) {
+                case "1":
+                    System.out.print("Ingrese ID de la cabina: ");
+                    String idCabina = scanner.nextLine();
+                    control.agregarCabina(idCabina);
+                    System.out.println("Cabina creada exitosamente");
+                    break;
 
-        int jugadorActual = random.nextInt(numJugadores) + 1;
+                case "2":
+                    System.out.print("Ingrese ID de la cabina: ");
+                    String id = scanner.nextLine();
+                    cabinaTelefonica cabina = control.seleccionarCabina(id);
+                    if (cabina != null) {
+                        System.out.println("Tipo de llamada:");
+                        System.out.println("1. Local");
+                        System.out.println("2. Larga distancia");
+                        System.out.println("3. Celular");
+                        System.out.print("Seleccione el tipo de llamada: ");
+                        int tipoLlamada = Integer.parseInt(scanner.nextLine());
 
-        System.out.println("¡Bienvenido a la Ruleta Rusa!");
-        System.out.println("El juego comenzará con el Jugador " + jugadorActual);
-
-        while (true) {
-            boolean rondaTerminada = false;
-
-            while (!rondaTerminada) {
-                System.out.println("\nTurno del Jugador " + jugadorActual);
-                System.out.print("¿Disparar? (s/n): ");
-                String respuesta = scanner.nextLine();
-
-                if (respuesta.equalsIgnoreCase("s")) {
-                    if (ruletas.disparar()) {
-                        System.out.println(" El Jugador " + jugadorActual + " ha perdido.");
-                        System.out.println(ruletas);
-                        System.out.println();
-                        rondaTerminada = true;
-                    } else {
-                        System.out.println(" El Jugador " + jugadorActual + " ha sobrevivido.");
-                        System.out.println(ruletas);
-                        jugadorActual++;
-                        if (jugadorActual > numJugadores) {
-                            jugadorActual = 1;
+                        String tipo;
+                        switch (tipoLlamada) {
+                            case 1:
+                                tipo = "local";
+                                break;
+                            case 2:
+                                tipo = "larga distancia";
+                                break;
+                            case 3:
+                                tipo = "celular";
+                                break;
+                            default:
+                                System.out.println("Opción no válida.");
+                                continue;
                         }
-                    }
-                } else if (respuesta.equalsIgnoreCase("n")) {
-                    rondaTerminada = true;
-                    System.out.println("El juego ha terminado.");
-                } else {
-                    System.out.println("Entrada no válida. Intenta de nuevo.");
-                }
-            }
+                        int duracion = random.nextInt(10) + 1;
+                        System.out.println("Duración de la llamada: " + duracion + " minutos.");
 
-            System.out.print("¿Jugar de nuevo? (s/n): ");
-            String respuesta = scanner.nextLine();
-            if (respuesta.equalsIgnoreCase("s")) {
-                ruletas.reiniciarJuego();
-                jugadorActual = random.nextInt(numJugadores) + 1;
-                System.out.println("Nuevo Juego Iniciado. Comienza el Jugador " + jugadorActual);
-            } else {
-                System.out.println("Gracias por jugar.");
-                break;
+                        cabina.registarLlamada(tipo, duracion);
+                    } else {
+                        System.out.println("Cabina no encontrada.");
+                    }
+                    break;
+
+                case "3":
+                    System.out.println("\n -------INFORMACIÓN DE  CABINAS ----------");
+                    control.mostrarHistorialCabinas();
+                    break;
+
+                case "4":
+                    System.out.println("\n -------INFORMACIÓN GENERAL ----------");
+                    control.mostrarResumen();
+                    break;
+
+                case "5":
+                    System.out.print("Ingrese ID de la cabina a reiniciar: ");
+                    String idReiniciar = scanner.nextLine();
+                    cabinaTelefonica cabinaReiniciar = control.seleccionarCabina(idReiniciar);
+                    if (cabinaReiniciar != null) {
+                        cabinaReiniciar.reiniciar();
+                        System.out.println("Cabina reiniciada.");
+                    } else {
+                        System.out.println("Cabina no encontrada.");
+                    }
+                    break;
+
+                case "0":
+                    System.out.println("Saliendo");
+                    break;
             }
-        }
-        scanner.close();
+        } while (!opcion.equals("0"));
     }
 }
